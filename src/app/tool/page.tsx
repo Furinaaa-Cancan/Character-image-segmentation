@@ -22,7 +22,7 @@ interface ImageFile {
 export default function ToolPage() {
   const [images, setImages] = useState<ImageFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [progress, setProgress] = useState({ current: 0, total: 0, stage: "" });
   const [exportFormat, setExportFormat] = useState<ExportFormat>("png");
   const [packAsZip, setPackAsZip] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
@@ -147,12 +147,13 @@ export default function ToolPage() {
     setIsProcessing(true);
 
     const pendingImages = images.filter(img => img.status === "pending");
-    setProgress({ current: 0, total: pendingImages.length });
+    setProgress({ current: 0, total: pendingImages.length, stage: "正在加载AI模型..." });
 
     const { removeBackground } = await import("@imgly/background-removal");
 
     let completed = 0;
     for (const img of pendingImages) {
+      setProgress(p => ({ ...p, stage: `正在处理: ${img.name}` }));
       setImages((prev) =>
         prev.map((item) =>
           item.id === img.id ? { ...item, status: "processing" } : item
@@ -162,7 +163,11 @@ export default function ToolPage() {
       try {
         const blob = await removeBackground(img.file, {
           progress: (key, current, total) => {
-            console.log(`Processing ${key}: ${current}/${total}`);
+            if (key === "compute:inference") {
+              setProgress(p => ({ ...p, stage: `AI分析中: ${img.name}` }));
+            } else if (key === "fetch:weights") {
+              setProgress(p => ({ ...p, stage: `下载模型: ${Math.round((current/total)*100)}%` }));
+            }
           },
         });
 
@@ -187,7 +192,7 @@ export default function ToolPage() {
       }
       
       completed++;
-      setProgress({ current: completed, total: pendingImages.length });
+      setProgress({ current: completed, total: pendingImages.length, stage: "处理完成" });
     }
 
     setIsProcessing(false);
@@ -381,7 +386,7 @@ export default function ToolPage() {
             className="mb-6 p-4 bg-[#F5EDE4] rounded-xl"
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[#3D2E24] font-medium">处理中...</span>
+              <span className="text-[#3D2E24] font-medium">{progress.stage || "处理中..."}</span>
               <span className="text-[#8B7355] text-sm">{progress.current}/{progress.total}</span>
             </div>
             <div className="w-full h-2 bg-[#E5D9CA] rounded-full overflow-hidden">
@@ -390,6 +395,9 @@ export default function ToolPage() {
                 style={{ width: `${progress.total > 0 ? (progress.current / progress.total) * 100 : 0}%` }}
               />
             </div>
+            <p className="text-xs text-[#8B7355] mt-2">
+              首次使用需下载AI模型(~40MB)，请耐心等待
+            </p>
           </motion.div>
         )}
 
