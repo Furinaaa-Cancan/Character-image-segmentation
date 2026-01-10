@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -46,11 +47,11 @@ export function HeroSection() {
             </p>
 
             <div className="flex flex-wrap gap-4 mb-10">
-              <a href="/tool">
+              <Link href="/tool">
                 <MagneticButton size="lg">
                   开始制作
                 </MagneticButton>
-              </a>
+              </Link>
               <a href="#how-it-works">
                 <MagneticButton variant="ghost" size="lg">
                   了解更多
