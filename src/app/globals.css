@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 莫奈暖色系配色 - Monet Warm Palette */
+  --background: #FDF8F3;           /* 米白色背景 */
+  --foreground: #3D2E24;           /* 深棕色文字 */
+  
+  /* 主色调 - 暖橘色系 */
+  --primary: #D4845A;              /* 陶土橘 */
+  --primary-light: #E9A67C;        /* 浅杏色 */
+  --primary-dark: #B86B42;         /* 深赭石 */
+  --primary-foreground: #FFFAF5;
+  
+  /* 强调色 - 柔和金棕 */
+  --accent: #C4956A;               /* 焦糖色 */
+  --accent-light: #E5C9A8;         /* 奶油杏 */
+  
+  /* 卡片与层级 */
+  --card: #FFFCF8;                 /* 象牙白 */
+  --card-foreground: #4A3728;
+  --muted: #F5EDE4;                /* 燕麦色 */
+  --muted-foreground: #8B7355;     /* 肉桂棕 */
+  
+  /* 装饰色 */
+  --sand: #E8DDD0;                 /* 沙色 */
+  --cream: #FFF5E6;                /* 奶油色 */
+  --blush: #EACED4;                /* 腮红粉 */
+  --sage: #C5CEB5;                 /* 鼠尾草绿 */
+  --terracotta: #C97B5D;           /* 赤陶色 */
+  
+  /* 语义色 */
+  --success: #8FA67A;              /* 橄榄绿 */
+  --warning: #D4A84B;              /* 芥末黄 */
+  --destructive: #C97066;          /* 玫瑰红 */
+  
+  /* 边框 */
+  --border: #E5D9CA;
+  --border-light: #F0E8DD;
+  --ring: #D4845A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(212, 132, 90, 0.25);
+  color: var(--foreground);
 }
