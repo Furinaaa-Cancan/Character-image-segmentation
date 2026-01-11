@@ -2,9 +2,9 @@
 
 import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, Download, Loader2, X, ImageIcon, Trash2, FileArchive, ArrowLeft, FolderOpen, Settings } from "lucide-react";
+import { Upload, Download, Loader2, X, ImageIcon, Trash2, FileArchive, FolderOpen, Settings, Edit2 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import Link from "next/link";
+import { ImageEditor } from "@/components/ImageEditor";
 
 type ExportFormat = "png" | "jpg" | "pdf";
 
@@ -26,6 +26,7 @@ export default function ToolPage() {
   const [exportFormat, setExportFormat] = useState<ExportFormat>("png");
   const [packAsZip, setPackAsZip] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+  const [editingImage, setEditingImage] = useState<ImageFile | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
   const zipInputRef = useRef<HTMLInputElement>(null);
@@ -275,21 +276,6 @@ export default function ToolPage() {
   return (
     <div className="min-h-screen pt-20 pb-12" style={{ background: "#FDF8F3" }}>
       <div className="max-w-5xl mx-auto px-6">
-        {/* 返回按钮 */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-6"
-        >
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-[#8B7355] hover:text-[#3D2E24] transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            返回首页
-          </Link>
-        </motion.div>
-
         {/* 标题 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -476,16 +462,27 @@ export default function ToolPage() {
                     {/* 悬停操作 */}
                     <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       {img.processed && (
-                        <button
-                          onClick={() => downloadSingle(img)}
-                          className="w-7 h-7 rounded-lg bg-white/90 flex items-center justify-center text-[#3D2E24] hover:bg-white"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
+                        <>
+                          <button
+                            onClick={() => setEditingImage(img)}
+                            className="w-7 h-7 rounded-lg bg-white/90 flex items-center justify-center text-[#3D2E24] hover:bg-white"
+                            title="编辑修复"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => downloadSingle(img)}
+                            className="w-7 h-7 rounded-lg bg-white/90 flex items-center justify-center text-[#3D2E24] hover:bg-white"
+                            title="下载"
+                          >
+                            <Download className="w-4 h-4" />
+                          </button>
+                        </>
                       )}
                       <button
                         onClick={() => removeImage(img.id)}
                         className="w-7 h-7 rounded-lg bg-white/90 flex items-center justify-center text-[#C97066] hover:bg-white"
+                        title="删除"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -602,6 +599,28 @@ export default function ToolPage() {
           </motion.div>
         )}
       </div>
+
+      {/* 图片编辑器 */}
+      <AnimatePresence>
+        {editingImage && editingImage.processed && (
+          <ImageEditor
+            imageUrl={editingImage.processed}
+            originalUrl={editingImage.preview}
+            onSave={(editedBlob) => {
+              const editedUrl = URL.createObjectURL(editedBlob);
+              setImages((prev) =>
+                prev.map((img) =>
+                  img.id === editingImage.id
+                    ? { ...img, processed: editedUrl, processedBlob: editedBlob }
+                    : img
+                )
+              );
+              setEditingImage(null);
+            }}
+            onClose={() => setEditingImage(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
