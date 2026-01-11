@@ -25,19 +25,13 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
   const [history, setHistory] = useState<ImageData[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [lastPoint, setLastPoint] = useState<{ x: number; y: number } | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // 预加载原图
   useEffect(() => {
     const img = new Image();
-    // blob URL不需要crossOrigin
-    if (!originalUrl.startsWith("blob:")) {
-      img.crossOrigin = "anonymous";
-    }
     img.onload = () => {
       originalImageRef.current = img;
-    };
-    img.onerror = (e) => {
-      console.error("Failed to load original image:", e);
     };
     img.src = originalUrl;
   }, [originalUrl]);
@@ -49,15 +43,11 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
-
+    
     const img = new Image();
-    // blob URL不需要crossOrigin
-    if (!imageUrl.startsWith("blob:")) {
-      img.crossOrigin = "anonymous";
-    }
     img.onload = () => {
       // 限制最大尺寸以提高性能
-      const maxSize = 1200;
+      const maxSize = 800;
       let width = img.width;
       let height = img.height;
       
@@ -75,9 +65,7 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
       const initialState = ctx.getImageData(0, 0, canvas.width, canvas.height);
       setHistory([initialState]);
       setHistoryIndex(0);
-    };
-    img.onerror = (e) => {
-      console.error("Failed to load processed image:", e);
+      setImageLoaded(true);
     };
     img.src = imageUrl;
   }, [imageUrl]);
@@ -422,29 +410,43 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
         {/* 画布区域 */}
         <div 
           ref={containerRef}
-          className="flex-1 overflow-hidden rounded-xl relative"
+          className="overflow-hidden rounded-xl relative"
           style={{ 
-            background: "repeating-conic-gradient(#d0d0d0 0% 25%, #f0f0f0 0% 50%) 50% / 20px 20px"
+            background: "repeating-conic-gradient(#d0d0d0 0% 25%, #f0f0f0 0% 50%) 50% / 20px 20px",
+            minHeight: "400px",
+            height: "50vh"
           }}
         >
+          {!imageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-[#8B7355]">加载中...</div>
+            </div>
+          )}
           <div 
-            className="absolute inset-0 flex items-center justify-center"
+            className="w-full h-full flex items-center justify-center overflow-auto p-4"
             style={{
-              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              transform: `scale(${zoom})`,
               transformOrigin: "center",
             }}
           >
-            <canvas
-              ref={canvasRef}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseUp}
-              className="max-w-none shadow-lg"
-              style={{ 
-                cursor: tool === "move" ? "grab" : "crosshair",
+            <div
+              style={{
+                transform: `translate(${pan.x}px, ${pan.y}px)`,
               }}
-            />
+            >
+              <canvas
+                ref={canvasRef}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseUp}
+                className="shadow-lg block"
+                style={{ 
+                  cursor: tool === "move" ? "grab" : "crosshair",
+                  display: imageLoaded ? "block" : "none",
+                }}
+              />
+            </div>
           </div>
         </div>
 
