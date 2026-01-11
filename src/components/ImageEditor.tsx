@@ -29,9 +29,15 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
   // 预加载原图
   useEffect(() => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    // blob URL不需要crossOrigin
+    if (!originalUrl.startsWith("blob:")) {
+      img.crossOrigin = "anonymous";
+    }
     img.onload = () => {
       originalImageRef.current = img;
+    };
+    img.onerror = (e) => {
+      console.error("Failed to load original image:", e);
     };
     img.src = originalUrl;
   }, [originalUrl]);
@@ -45,7 +51,10 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
     if (!ctx) return;
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    // blob URL不需要crossOrigin
+    if (!imageUrl.startsWith("blob:")) {
+      img.crossOrigin = "anonymous";
+    }
     img.onload = () => {
       // 限制最大尺寸以提高性能
       const maxSize = 1200;
@@ -66,6 +75,9 @@ export function ImageEditor({ imageUrl, originalUrl, onSave, onClose }: ImageEdi
       const initialState = ctx.getImageData(0, 0, canvas.width, canvas.height);
       setHistory([initialState]);
       setHistoryIndex(0);
+    };
+    img.onerror = (e) => {
+      console.error("Failed to load processed image:", e);
     };
     img.src = imageUrl;
   }, [imageUrl]);
