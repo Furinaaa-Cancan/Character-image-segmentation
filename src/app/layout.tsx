@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "人物轮廓分割工具",
-  description: "AI智能人物轮廓分割，支持批量处理，一键导出",
+  title: "PosterCraft Pro - AI驱动的专业海报生成平台",
+  description: "从人像抠图到批量海报输出，一站式商业解决方案。AI智能分割，3秒生成专业海报。",
 };
 
 export default function RootLayout({
@@ -24,11 +24,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ background: '#FDF8F3', color: '#3D2E24' }}
-      >
-        <main>{children}</main>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {children}
       </body>
     </html>
   );

@@ -2,36 +2,36 @@
 
 :root {
   /* 莫奈暖色系配色 - Monet Warm Palette */
-  --background: #FDF8F3;           /* 米白色背景 */
-  --foreground: #3D2E24;           /* 深棕色文字 */
+  --background: #FDF8F3;
+  --foreground: #3D2E24;
   
   /* 主色调 - 暖橘色系 */
-  --primary: #D4845A;              /* 陶土橘 */
-  --primary-light: #E9A67C;        /* 浅杏色 */
-  --primary-dark: #B86B42;         /* 深赭石 */
+  --primary: #D4845A;
+  --primary-light: #E9A67C;
+  --primary-dark: #B86B42;
   --primary-foreground: #FFFAF5;
   
   /* 强调色 - 柔和金棕 */
-  --accent: #C4956A;               /* 焦糖色 */
-  --accent-light: #E5C9A8;         /* 奶油杏 */
+  --accent: #C4956A;
+  --accent-light: #E5C9A8;
   
   /* 卡片与层级 */
-  --card: #FFFCF8;                 /* 象牙白 */
+  --card: #FFFCF8;
   --card-foreground: #4A3728;
-  --muted: #F5EDE4;                /* 燕麦色 */
-  --muted-foreground: #8B7355;     /* 肉桂棕 */
+  --muted: #F5EDE4;
+  --muted-foreground: #8B7355;
   
   /* 装饰色 */
-  --sand: #E8DDD0;                 /* 沙色 */
-  --cream: #FFF5E6;                /* 奶油色 */
-  --blush: #EACED4;                /* 腮红粉 */
-  --sage: #C5CEB5;                 /* 鼠尾草绿 */
-  --terracotta: #C97B5D;           /* 赤陶色 */
+  --sand: #E8DDD0;
+  --cream: #FFF5E6;
+  --blush: #EACED4;
+  --sage: #C5CEB5;
+  --terracotta: #C97B5D;
   
   /* 语义色 */
-  --success: #8FA67A;              /* 橄榄绿 */
-  --warning: #D4A84B;              /* 芥末黄 */
-  --destructive: #C97066;          /* 玫瑰红 */
+  --success: #8FA67A;
+  --warning: #D4A84B;
+  --destructive: #C97066;
   
   /* 边框 */
   --border: #E5D9CA;
@@ -48,6 +48,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* 自定义滚动条 */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
@@ -55,6 +56,7 @@
 
 *::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 *::-webkit-scrollbar-track {
@@ -84,4 +86,352 @@ body {
 ::selection {
   background: rgba(212, 132, 90, 0.25);
   color: var(--foreground);
+}
+
+/* 全局动画 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(212, 132, 90, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(212, 132, 90, 0.5); }
+}
+
+/* 动画类 */
+.animate-fade-in { animation: fadeIn 0.5s ease-out; }
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
+.animate-fade-in-down { animation: fadeInDown 0.6s ease-out; }
+.animate-slide-in-left { animation: slideInLeft 0.6s ease-out; }
+.animate-slide-in-right { animation: slideInRight 0.6s ease-out; }
+.animate-scale-in { animation: scaleIn 0.5s ease-out; }
+.animate-pulse { animation: pulse 2s ease-in-out infinite; }
+.animate-shimmer { 
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-spin { animation: spin 1s linear infinite; }
+.animate-bounce { animation: bounce 1s ease-in-out infinite; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
+
+/* 延迟动画 */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* 悬停效果 */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(61, 46, 36, 0.1);
+}
+
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(212, 132, 90, 0.3);
+}
+
+/* 渐变背景 */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, #D4845A 0%, #C4956A 50%, #E5C9A8 100%);
+}
+
+.gradient-soft {
+  background: linear-gradient(180deg, var(--background) 0%, var(--muted) 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 玻璃态效果 */
+.glass {
+  background: rgba(255, 252, 248, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 217, 202, 0.5);
+}
+
+.glass-dark {
+  background: rgba(61, 46, 36, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 透明棋盘背景（用于显示透明图片） */
+.checkerboard {
+  background: repeating-conic-gradient(#f0f0f0 0% 25%, #ffffff 0% 50%) 50% / 12px 12px;
+}
+
+/* 文字截断 */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 焦点样式 */
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 132, 90, 0.3);
+}
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 132, 90, 0.3);
+}
+
+/* 禁用状态 */
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 响应式隐藏 */
+@media (max-width: 640px) {
+  .hide-mobile { display: none !important; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hide-tablet { display: none !important; }
+}
+
+@media (min-width: 1025px) {
+  .hide-desktop { display: none !important; }
+}
+
+/* 加载骨架屏 */
+.skeleton {
+  background: linear-gradient(90deg, var(--muted) 25%, var(--card) 50%, var(--muted) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* 按钮基础样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  box-shadow: 0 4px 14px rgba(212, 132, 90, 0.25);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(212, 132, 90, 0.35);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--muted);
+  border-color: var(--primary);
+}
+
+/* 卡片基础样式 */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(212, 132, 90, 0.3);
+  box-shadow: 0 8px 24px rgba(61, 46, 36, 0.08);
+}
+
+/* 输入框样式 */
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(212, 132, 90, 0.15);
+}
+
+.input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* 标签样式 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.badge-primary {
+  background: rgba(212, 132, 90, 0.15);
+  color: var(--primary);
+}
+
+.badge-success {
+  background: rgba(143, 166, 122, 0.15);
+  color: var(--success);
+}
+
+.badge-warning {
+  background: rgba(212, 168, 75, 0.15);
+  color: var(--warning);
+}
+
+.badge-error {
+  background: rgba(201, 112, 102, 0.15);
+  color: var(--destructive);
+}
+
+/* 分割线 */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.5rem 0;
+}
+
+/* 工具提示 */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 0.5rem 0.75rem;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 50;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
 }

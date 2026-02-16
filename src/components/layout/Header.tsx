@@ -2,132 +2,125 @@
 
 import { useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { MagneticButton } from "@/components/ui/magnetic-button";
+import { Menu, X, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 const navItems = [
-  { name: "轮廓分割", href: "/tool", isPage: true },
-  { name: "使用流程", href: "#how-it-works", isPage: false },
-  { name: "案例", href: "#showcase", isPage: false },
-  { name: "定价", href: "#pricing", isPage: false },
+  { name: "功能", href: "#features" },
+  { name: "流程", href: "#how-it-works" },
+  { name: "案例", href: "#showcase" },
+  { name: "定价", href: "#pricing" },
 ];
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollY } = useScroll();
-
-  const headerHeight = useTransform(scrollY, [0, 100], [80, 64]);
-  const bgOpacity = useTransform(scrollY, [0, 100], [0, 0.95]);
+  const bgOpacity = useTransform(scrollY, [0, 50], [0, 1]);
 
   return (
-    <motion.header
-      style={{ height: headerHeight }}
-      className="fixed top-0 left-0 right-0 z-50"
-    >
-      <motion.div
-        style={{ opacity: bgOpacity }}
-        className="absolute inset-0 bg-[#FDF8F3]/95 backdrop-blur-md border-b border-[#E5D9CA]"
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* 背景 - 玻璃态效果 */}
+      <motion.div 
+        style={{ opacity: bgOpacity }} 
+        className="absolute inset-0 glass border-b border-[var(--border)]"
       />
-
-      <div className="relative h-full max-w-6xl mx-auto px-6 flex items-center justify-between">
+      
+      <div className="relative h-20 max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <motion.div
-            whileHover={{ scale: 1.01 }}
-            className="flex items-center gap-3"
+          <motion.div 
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            className="w-11 h-11 rounded-2xl gradient-primary flex items-center justify-center shadow-md"
           >
-          <motion.div
-            className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#D4845A] to-[#C4956A] flex items-center justify-center shadow-sm"
-            whileHover={{
-              boxShadow: "0 4px 20px rgba(212, 132, 90, 0.25)",
-            }}
-          >
-            <span className="text-white font-bold text-sm">PC</span>
+            <Sparkles className="w-6 h-6 text-white" />
           </motion.div>
-            <span className="text-lg font-semibold text-[#3D2E24]">
+          <div className="flex flex-col">
+            <span className="text-[var(--foreground)] font-bold text-xl tracking-tight">
               PosterCraft
             </span>
-          </motion.div>
+            <span className="text-xs text-[var(--muted-foreground)] font-medium">
+              专业海报生成
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-10">
-          {navItems.map((item) => 
-            item.isPage ? (
-              <Link key={item.name} href={item.href}>
-                <motion.span
-                  className="relative text-[#8B7355] hover:text-[#3D2E24] transition-colors py-2 text-[15px] cursor-pointer"
-                  whileHover={{ y: -1 }}
-                >
-                  {item.name}
-                </motion.span>
-              </Link>
-            ) : (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                className="relative text-[#8B7355] hover:text-[#3D2E24] transition-colors py-2 text-[15px]"
-                whileHover={{ y: -1 }}
-              >
-                {item.name}
-              </motion.a>
-            )
-          )}
+        {/* 导航 */}
+        <nav className="hidden md:flex items-center gap-2">
+          {navItems.map((item) => (
+            <a 
+              key={item.name} 
+              href={item.href}
+              className="px-4 py-2 text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--primary)] hover:bg-[var(--muted)] rounded-xl transition-all"
+            >
+              {item.name}
+            </a>
+          ))}
         </nav>
 
-        {/* CTA Buttons */}
-        <div className="hidden md:flex items-center gap-5">
-          <motion.a
-            href="/login"
-            className="text-[#8B7355] hover:text-[#3D2E24] transition-colors text-[15px]"
-            whileHover={{ y: -1 }}
-          >
-            登录
-          </motion.a>
-          <MagneticButton size="sm">开始使用</MagneticButton>
+        {/* 右侧按钮 */}
+        <div className="hidden md:flex items-center gap-3">
+          <Link href="/tool">
+            <motion.button 
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn btn-primary text-sm shadow-lg"
+            >
+              <Sparkles className="w-4 h-4" />
+              免费试用
+            </motion.button>
+          </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <motion.button
-          className="md:hidden p-2 text-[#3D2E24]"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        {/* 移动端菜单按钮 */}
+        <motion.button 
           whileTap={{ scale: 0.9 }}
+          className="md:hidden p-2.5 text-[var(--foreground)] rounded-xl hover:bg-[var(--muted)] transition-colors" 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </motion.button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* 移动端菜单 */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-[#FDF8F3]/98 backdrop-blur-md border-b border-[#E5D9CA] md:hidden"
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }} 
+            animate={{ opacity: 1, height: "auto" }} 
+            exit={{ opacity: 0, height: 0 }}
+            className="absolute top-full left-0 right-0 glass border-b border-[var(--border)] md:hidden shadow-xl overflow-hidden"
           >
-            <nav className="flex flex-col p-6 gap-4">
-              {navItems.map((item, i) => (
-                <motion.a
-                  key={item.name}
+            <nav className="flex flex-col p-6 gap-2 max-w-7xl mx-auto">
+              {navItems.map((item, index) => (
+                <motion.a 
+                  key={item.name} 
                   href={item.href}
-                  className="text-[#8B7355] hover:text-[#3D2E24] text-lg py-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-[var(--foreground)] font-medium py-3 px-4 rounded-xl hover:bg-[var(--muted)] transition-colors" 
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
                 </motion.a>
               ))}
-              <div className="flex gap-4 mt-4">
-                <MagneticButton className="flex-1">开始使用</MagneticButton>
-              </div>
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mt-4 pt-4 border-t border-[var(--border)]"
+              >
+                <Link href="/tool" className="block">
+                  <button className="w-full btn btn-primary shadow-lg">
+                    <Sparkles className="w-4 h-4" />
+                    免费试用
+                  </button>
+                </Link>
+              </motion.div>
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

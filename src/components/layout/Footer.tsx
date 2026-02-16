@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Twitter, Github, Mail } from "lucide-react";
+import { Twitter, Github, Mail, Heart, ArrowUp } from "lucide-react";
+import Link from "next/link";
 
 const footerLinks = {
   产品: [
@@ -29,40 +30,50 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer className="relative border-t border-[#E5D9CA]" style={{ background: "#FFFCF8" }}>
-      <div className="max-w-6xl mx-auto px-6 py-14">
-        {/* 主内容区 */}
+    <footer className="relative border-t border-[#E5D9CA]" style={{ background: "linear-gradient(180deg, #FFFCF8 0%, #FDF8F3 100%)" }}>
+      {/* 回到顶部按钮 */}
+      <motion.button
+        onClick={scrollToTop}
+        whileHover={{ y: -3, scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute -top-5 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#FFFCF8] border border-[#E5D9CA] shadow-md flex items-center justify-center text-[#8B7355] hover:text-[#D4845A] hover:border-[#D4845A]/30 transition-colors"
+      >
+        <ArrowUp className="w-4 h-4" />
+      </motion.button>
+
+      <div className="max-w-6xl mx-auto px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           {/* Logo & 简介 */}
           <div className="col-span-2">
-            <motion.a
-              href="/"
-              className="flex items-center gap-3 group mb-4"
-              whileHover={{ scale: 1.01 }}
-            >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#D4845A] to-[#C4956A] flex items-center justify-center shadow-sm">
+            <Link href="/" className="flex items-center gap-3 group mb-5">
+              <motion.div whileHover={{ scale: 1.05, rotate: 3 }} className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D4845A] to-[#C4956A] flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-sm">PC</span>
-              </div>
-              <span className="text-lg font-semibold text-[#3D2E24]">
-                PosterCraft
-              </span>
-            </motion.a>
-            <p className="text-[#8B7355] text-sm leading-relaxed max-w-xs">
-              AI驱动的专业海报生成平台，让每一张海报都成为艺术。
+              </motion.div>
+              <span className="text-lg font-semibold text-[#3D2E24]">PosterCraft</span>
+            </Link>
+            <p className="text-[#8B7355] text-sm leading-relaxed max-w-xs mb-6">
+              AI驱动的专业海报生成平台，让每一张海报都成为艺术。智能抠图，批量生成，简单高效。
             </p>
 
             {/* 社交链接 */}
-            <div className="flex gap-2 mt-5">
-              {socialLinks.map((social) => (
+            <div className="flex gap-2">
+              {socialLinks.map((social, i) => (
                 <motion.a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-[#F5EDE4] flex items-center justify-center text-[#8B7355] hover:text-[#D4845A] hover:bg-[#E5D9CA] transition-colors"
-                  whileHover={{ y: -2 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  whileHover={{ y: -3, scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
+                  className="w-10 h-10 rounded-xl bg-[#F5EDE4] flex items-center justify-center text-[#8B7355] hover:text-[#D4845A] hover:bg-[#E5D9CA] transition-all"
                 >
                   <social.icon className="w-4 h-4" />
                 </motion.a>
@@ -71,18 +82,22 @@ export function Footer() {
           </div>
 
           {/* 链接组 */}
-          {Object.entries(footerLinks).map(([category, links]) => (
+          {Object.entries(footerLinks).map(([category, links], categoryIndex) => (
             <div key={category}>
-              <h4 className="text-[#3D2E24] font-medium mb-4 text-sm">{category}</h4>
-              <ul className="space-y-2.5">
-                {links.map((link) => (
+              <h4 className="text-[#3D2E24] font-semibold mb-4 text-sm">{category}</h4>
+              <ul className="space-y-3">
+                {links.map((link, i) => (
                   <li key={link.name}>
                     <motion.a
                       href={link.href}
-                      className="text-[#8B7355] hover:text-[#D4845A] text-sm transition-colors"
-                      whileHover={{ x: 2 }}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: categoryIndex * 0.1 + i * 0.05 }}
+                      className="text-[#8B7355] hover:text-[#D4845A] text-sm transition-colors inline-flex items-center gap-1 group"
+                      whileHover={{ x: 3 }}
                     >
                       {link.name}
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
                     </motion.a>
                   </li>
                 ))}
@@ -92,17 +107,23 @@ export function Footer() {
         </div>
 
         {/* 分隔线 */}
-        <div className="my-10 h-px bg-[#E5D9CA]" />
+        <div className="my-10 h-px bg-gradient-to-r from-transparent via-[#E5D9CA] to-transparent" />
 
         {/* 底部版权 */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[#8B7355] text-sm">
-            © 2026 PosterCraft. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4 text-[#8B7355] text-sm">
-            <a href="/privacy" className="hover:text-[#D4845A] transition-colors">隐私政策</a>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[#8B7355] text-sm flex items-center gap-1"
+          >
+            © 2026 PosterCraft. Made with <Heart className="w-3 h-3 text-[#C97066] fill-[#C97066]" /> in China
+          </motion.p>
+          <div className="flex items-center gap-6 text-[#8B7355] text-sm">
+            <motion.a href="/privacy" whileHover={{ color: "#D4845A" }} className="transition-colors">隐私政策</motion.a>
             <span className="text-[#E5D9CA]">|</span>
-            <a href="/terms" className="hover:text-[#D4845A] transition-colors">服务条款</a>
+            <motion.a href="/terms" whileHover={{ color: "#D4845A" }} className="transition-colors">服务条款</motion.a>
+            <span className="text-[#E5D9CA]">|</span>
+            <motion.a href="/sitemap" whileHover={{ color: "#D4845A" }} className="transition-colors">网站地图</motion.a>
           </div>
         </div>
       </div>
